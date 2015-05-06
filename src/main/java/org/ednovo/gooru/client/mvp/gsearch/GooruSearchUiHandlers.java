@@ -61,8 +61,9 @@ public interface GooruSearchUiHandlers extends BaseUiHandlers,RefreshSearchHandl
 	/**
 	 * This method will set the type of search
 	 * @param isCollectionSearch
+	 * @param query 
 	 */
-	void setSearchType(boolean isCollectionSearch);
+	void setSearchType(boolean isCollectionSearch, String query);
 	
 	void displayAddResourcePoup(ResourceSearchResultDo resourceSearchResultDo);
 	void displayUsersList(ResourceSearchResultDo resourceSearchResultDo);

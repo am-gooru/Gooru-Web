@@ -11,9 +11,10 @@
   <div class="popBody">
     <tbp:H4Panel ui:field="UsedByStr"></tbp:H4Panel>
           <div class="peopleGroup">
-    <g:HTMLPanel ui:field="scrollContainer" styleName="scrollDiv">
+          <g:ScrollPanel ui:field="scrollContents" styleName="scrollDiv">
+    <g:HTMLPanel ui:field="scrollContainer" >
        
-      </g:HTMLPanel>
+      </g:HTMLPanel></g:ScrollPanel>
        </div>
     </div>
 

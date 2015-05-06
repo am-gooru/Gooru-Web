@@ -42,6 +42,7 @@ import java.util.ArrayList;
 
 import org.ednovo.gooru.client.gin.IsViewWithHandlers;
 import org.ednovo.gooru.shared.model.content.ResourceCollDo;
+import org.ednovo.gooru.shared.model.search.ResourceSearchResultDo;
 
 import com.gwtplatform.mvp.client.PopupView;
 
@@ -49,6 +50,6 @@ public interface IsViewMorePeopleView extends PopupView, IsViewWithHandlers<View
 
 	public void hidePopup();
 
-	void displayContents(ArrayList<ResourceCollDo> userCollectionsList);
+	void displayContents(ArrayList<ResourceCollDo> userCollectionsList,ResourceSearchResultDo searchResultDo);
 
 }

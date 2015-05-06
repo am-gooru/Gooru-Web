@@ -690,7 +690,7 @@ public abstract class SearchAbstractPresenter<T extends ResourceSearchResultDo, 
 
 	}
 	@Override
-	public void setSearchType(boolean isCollectionSearch) {
+	public void setSearchType(boolean isCollectionSearch, String query) {
 		String viewToken;
 		if(isCollectionSearch){
 			viewToken=PlaceTokens.SEARCH_COLLECTION;
@@ -700,6 +700,7 @@ public abstract class SearchAbstractPresenter<T extends ResourceSearchResultDo, 
 		Map<String, String> params = getView().getSearchFilters(viewToken);
         //onSearchRequest(viewToken);
 		getSearchDo().setPageNum(1);
+		getSearchDo().setQuery(query);
 		params.put(QUERY, getSearchDo().getUrlQuery());
 		getPlaceManager().revealPlace(viewToken, params, true);
 	}

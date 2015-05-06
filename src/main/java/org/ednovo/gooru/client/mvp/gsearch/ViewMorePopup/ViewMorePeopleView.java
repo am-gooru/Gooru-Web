@@ -10,6 +10,7 @@ import org.ednovo.gooru.client.mvp.search.util.CollectionSearchWidget.OnCollecti
 import org.ednovo.gooru.client.uc.H4Panel;
 import org.ednovo.gooru.shared.i18n.MessageProperties;
 import org.ednovo.gooru.shared.model.content.ResourceCollDo;
+import org.ednovo.gooru.shared.model.search.ResourceSearchResultDo;
 import org.ednovo.gooru.shared.util.ClientConstants;
 
 import com.google.gwt.core.client.GWT;
@@ -18,6 +19,8 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ScrollEvent;
+import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -48,7 +51,13 @@ public class ViewMorePeopleView extends PopupViewWithUiHandlers<ViewMorePeopleUi
 	PopupPanel appPopUp;
 	@UiField Anchor cancelResourcePopupBtnLbl;
 	@UiField HTMLPanel scrollContainer;
+	@UiField ScrollPanel scrollContents;
 	@UiField H4Panel UsedByStr;
+	
+	int totalUsersCountVal = 0;
+	int limitUsers = 20;
+	int initialOffset = 1;
+	ResourceSearchResultDo searchResultDoObj = new ResourceSearchResultDo();
 
 	@Inject
 	public ViewMorePeopleView(EventBus eventBus) {
@@ -57,6 +66,18 @@ public class ViewMorePeopleView extends PopupViewWithUiHandlers<ViewMorePeopleUi
 		appPopUp.setWidget(uiBinder.createAndBindUi(this));
 		appPopUp.setGlassEnabled(true);
 		appPopUp.getElement().getStyle().setZIndex(999999);
+		
+		scrollContents.addScrollHandler(new ScrollHandler() {
+			
+			@Override
+			public void onScroll(ScrollEvent event) {
+				if(totalUsersCountVal>(initialOffset*limitUsers))
+				{
+				getUiHandlers().getWorkspaceData((initialOffset*limitUsers),limitUsers,searchResultDoObj.getGooruOid());
+				initialOffset = initialOffset+1;
+				}
+			}
+		});
 		
 	}
 
@@ -108,8 +129,10 @@ public class ViewMorePeopleView extends PopupViewWithUiHandlers<ViewMorePeopleUi
 	}
 	
 	@Override
-	public void displayContents(ArrayList<ResourceCollDo> userCollectionsList) {
-		UsedByStr.setText("Used by "+userCollectionsList.size()+" people");
+	public void displayContents(ArrayList<ResourceCollDo> userCollectionsList, ResourceSearchResultDo searchResultDo) {
+		searchResultDoObj = searchResultDo;
+		totalUsersCountVal = searchResultDo.getResourceUsedUserCount();
+		UsedByStr.setText("Used by "+totalUsersCountVal+" people");
 		scrollContainer.clear();
 		for(int i=0; i<userCollectionsList.size(); i++)
 		{

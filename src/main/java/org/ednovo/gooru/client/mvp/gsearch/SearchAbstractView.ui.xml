@@ -68,7 +68,7 @@
 								</panel:UlPanel>
 								<div class="authorDetails">
 									<div class="input-group">
-										<g:InlineLabel text="{i18n.GL0573} {i18n.GL_SPL_SEMICOLON}" title="{i18n.GL0573}"></g:InlineLabel>
+										<g:InlineLabel text="{i18n.GL0573}" title="{i18n.GL0573}"></g:InlineLabel>
 										<g:TextBox  styleName="form-control" ui:field="authorTxtBox" />
 										<g:Label styleName="searchQuestionMark"></g:Label>
 									</div>
@@ -102,7 +102,7 @@
 								<g:HTMLPanel styleName="btn-group">
 								    <panel:HTMLEventPanel ui:field="resourceFiltersDropDwn">
 										<button type="button" class="btn btn-primary">
-											<span class="glyphicon glyphicon-align-justify"
+											<span class="glyphicon gliphIconImage"
 												aria-hidden="true"></span>
 										</button>
 										<button type="button" class="btn btn-primary dropdown-toggle"

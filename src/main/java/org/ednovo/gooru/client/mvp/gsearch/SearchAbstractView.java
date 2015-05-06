@@ -300,6 +300,7 @@ public abstract class SearchAbstractView<T extends ResourceSearchResultDo> exten
 		gradesDropDown.addDomHandler(new GradesDropDownHandler(), ClickEvent.getType());
 		oerLbl.addClickHandler(new ClickOnOER());
 		resourceFiltersDropDwn.addClickHandler(new ResourceFiltersDropDown());
+		authorTxtBox.getElement().setAttribute("placeholder", i18n.GL3221());
 		authorTxtBox.addKeyUpHandler(new KeyUpHandler() {
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
@@ -502,7 +503,7 @@ public abstract class SearchAbstractView<T extends ResourceSearchResultDo> exten
 				resourceSearchPanel.setVisible(true);
 				collectionSearchPanel.setVisible(false);
 				resetData();
-				getUiHandlers().setSearchType(false);
+				getUiHandlers().setSearchType(false,getSearchText());
 			}
 		});
 	}
@@ -520,7 +521,7 @@ public abstract class SearchAbstractView<T extends ResourceSearchResultDo> exten
 				resourceSearchPanel.setVisible(false);
 				collectionSearchPanel.setVisible(true);
 				resetData();
-				getUiHandlers().setSearchType(true);
+				getUiHandlers().setSearchType(true,getSearchText());
 			}
 		});
 	}
