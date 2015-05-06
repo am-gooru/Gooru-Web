@@ -122,6 +122,12 @@
 #gooruSearchMainContainer .collectionDetails{
 	margin-bottom:10px;
 }
+#gooruSearchMainContainer .btn-group{
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	border-radius: 6px 6px 6px 6px;
+}
 #gooruSearchMainContainer .authorDetails{
 	display:inline-block;
 	vertical-align:middle;

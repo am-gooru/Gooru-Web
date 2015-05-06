@@ -71,7 +71,7 @@ public class GooruGradesView extends BaseViewWithHandlers<GooruGradesUiHandlers>
 	
 	public static final String REMOVE = "remove";
 	
-	String[] elementaryGrades = new String[]{"Elementry",i18n.GL3071(),i18n.GL3072(),i18n.GL3073(),i18n.GL3074(),i18n.GL3075(),i18n.GL3076()};
+	String[] elementaryGrades = new String[]{"Elementary",i18n.GL3071(),i18n.GL3072(),i18n.GL3073(),i18n.GL3074(),i18n.GL3075(),i18n.GL3076()};
 	String[] middleGrades = new String[]{"Middle School",i18n.GL3077(),i18n.GL3078(),i18n.GL3079()};
 	String[] higherGrades = new String[]{"High School",i18n.GL3080(),i18n.GL3081(),i18n.GL3082(),i18n.GL3083()};
 	String backgroundColor="rgb(16, 118, 187)";
@@ -161,7 +161,7 @@ public class GooruGradesView extends BaseViewWithHandlers<GooruGradesUiHandlers>
 		Iterator<Widget> widgets= gradeContainer.iterator();
 		while(widgets.hasNext()){
 			Widget widget = widgets.next();
-			
+
 			if(widget instanceof UlPanel){
 				Iterator<Widget>  liwidgets = ((UlPanel) widget).iterator();
 				while(liwidgets.hasNext()){
@@ -173,22 +173,10 @@ public class GooruGradesView extends BaseViewWithHandlers<GooruGradesUiHandlers>
 							}else{
 								((LiPanel) liwidget).getWidget(0).getElement().getStyle().clearBackgroundColor();
 							}
-							/*if(((LiPanel) liwidget).getWidget(0).getElement().getStyle().getBackgroundColor().equalsIgnoreCase(backgroundColor)){
-								((LiPanel) liwidget).getWidget(0).getElement().getStyle().clearBackgroundColor();
-								if(addOrRemove){
-									((LiPanel) liwidget).getWidget(0).getElement().getStyle().setBackgroundColor(backgroundColor);
-								}
-							}else{
-								((LiPanel) liwidget).getWidget(0).getElement().getStyle().setBackgroundColor(backgroundColor);		
-								
-								if(addOrRemove){
-									((LiPanel) liwidget).getWidget(0).getElement().getStyle().clearBackgroundColor();
-								}
-							}*/
 						}
 					}
 				}
-				
+
 			}
 		}
 	}
