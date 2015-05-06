@@ -51,6 +51,7 @@ public interface ViewMorePeopleUiHandlers extends BaseUiHandlers, EventHandler{
 
 	public void hidePopup();
 	void getResourceDataByResource(ResourceSearchResultDo searchResultDo,String searchType);
+	public void getWorkspaceData(int i, int j, String gooruOid);
 	
 
 }

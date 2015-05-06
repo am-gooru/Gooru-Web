@@ -636,6 +636,7 @@ Back to top button
 #morePeoplePopWrapper .userDetContainer .userGrades{
 	margin-left: 29%;
 margin-top: -5%;
+word-wrap: break-word;
 }
 #morePeoplePopWrapper .colleDetContaner img {
   width: 40px;

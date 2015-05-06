@@ -31,10 +31,7 @@ import java.util.HashMap;
 
 import org.ednovo.gooru.client.SimpleAsyncCallback;
 import org.ednovo.gooru.client.gin.AppClientFactory;
-import org.ednovo.gooru.shared.model.content.ClasspageItemDo;
 import org.ednovo.gooru.shared.model.content.ResourceCollDo;
-import org.ednovo.gooru.shared.model.folder.FolderListDo;
-import org.ednovo.gooru.shared.model.search.CollectionSearchResultDo;
 import org.ednovo.gooru.shared.model.search.ResourceSearchResultDo;
 import org.ednovo.gooru.shared.util.ClientConstants;
 
@@ -76,7 +73,7 @@ public class ViewMorePeoplePresenter extends PresenterWidget<IsViewMorePeopleVie
 	
 	@Override
 	public void getResourceDataByResource(ResourceSearchResultDo searchResultDo,String searchType) {
-		this.searchResultDo =searchResultDo;
+		this.searchResultDo =searchResultDo;		
 		getWorkspaceData(0,20,searchResultDo.getGooruOid());
 	}
 	
@@ -84,7 +81,7 @@ public class ViewMorePeoplePresenter extends PresenterWidget<IsViewMorePeopleVie
 		AppClientFactory.getInjector().getResourceService().getResourceBasedUsersDetails(resourceId, offset, limit, new SimpleAsyncCallback<ArrayList<ResourceCollDo>>() {
 			@Override
 			public void onSuccess(ArrayList<ResourceCollDo> userCollectionsList) {
-					getView().displayContents(userCollectionsList);
+					getView().displayContents(userCollectionsList,searchResultDo);
 			}
 		});
 	}

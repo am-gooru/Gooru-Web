@@ -7,7 +7,7 @@
             <gg:PPanel styleName="userGrades" ui:field="gradePanel"></gg:PPanel>
           </g:HTMLPanel>
         </div>
-        <div class="col-md-6 col-sm-6">
+        <div class="col-md-8 col-sm-8">
           <div class="colleDetContaner"><g:Image ui:field="collectionImage"/><g:InlineLabel ui:field="relatedCollectionTitle" styleName="userNameforCollection"></g:InlineLabel> 
           </div>
         </div>
