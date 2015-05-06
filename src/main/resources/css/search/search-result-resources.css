@@ -422,6 +422,7 @@ margin:0 0 0 -20px !important;
 	margin:0 auto;
 	border:1px solid #ddd;
 	background-color: #fff;
+	padding: 3px 3px;
 }
 #addCollectionPopup .popFooter{
 	background:#dddddd;
@@ -455,6 +456,7 @@ margin:0 0 0 -20px !important;
  	width: 17px;
  	display: inline-block;
     cursor: pointer;
+    margin-left: 27px;
 }
 #addCollectionPopup .foldermenuHeader{
   	background: url("../images/folders/panel/folder-small-icon.png") no-repeat scroll 14px 8px rgba(0, 0, 0, 0);
@@ -526,6 +528,9 @@ margin:0 0 0 -20px !important;
 	text-align:right !important;
 	width: 49%;
 }
+#addCollectionPopup .rightAlign button.primary{
+	padding: 7px 30px;
+}
 #addCollectionPopup .dropdownListContainerScrollPanel{
 	border: 1px solid #ddd;
 	list-style-type: none;
@@ -552,6 +557,11 @@ margin:0 0 0 -20px !important;
 #addCollectionPopup .lblSuccessImage{
 	background: url(../images/folders/panel/checkmark.png) no-repeat center;
 	height: 152px;
+}
+
+#addCollectionPopup .addNewCollectionStyle{
+	color: #1076bb;
+	margin-left: 10px;
 }
 
 /*Add Resource to collection popup end*/
