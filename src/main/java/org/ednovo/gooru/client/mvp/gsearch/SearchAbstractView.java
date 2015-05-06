@@ -26,7 +26,6 @@ package org.ednovo.gooru.client.mvp.gsearch;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -181,7 +180,7 @@ public abstract class SearchAbstractView<T extends ResourceSearchResultDo> exten
 	int pageNumber = 1,resultCountVal=0,previousValue,scrollTop=0,previousCount=4,previousScrollValue=0;
 	
 	boolean isInsertTems=false;
-	boolean firstTime = false,isApiInProgress=true,isApiInProgressBack=true;
+	boolean firstTime = false,isApiInProgress=true,isApiInProgressLoad=true,isApiInProgressBack=true,isApiInProgressBackLoad=true;
 	
 	String selectedSubjects,selectedAuthors, selectedGrades,selectedStandards,selectedCategories,selectedStars,oerValue,selectedAccessMode,selectedPublisheValues,selectedAuggreValues;
 	
@@ -248,47 +247,45 @@ public abstract class SearchAbstractView<T extends ResourceSearchResultDo> exten
 					}
 					//This condition is used when user navigate scroll bottom to top at that time it will check the visible items,main panel count,pagenumber and checking the scroll is scrolling to top 
 					if(event.getScrollTop()<=(Document.get().getBody().getClientHeight()/12) && previousScroll>event.getScrollTop()){
-						if(pageCountForStorage>9 && isApiInProgressBack && (searchResultPanel.getWidgetCount()>=10)){
-							isApiInProgressBack=false;
+						if(pageCountForStorage>=10 && isApiInProgressBack && isApiInProgressBackLoad && (searchResultPanel.getWidgetCount()>=10)){
+							isApiInProgressBack=isApiInProgressBackLoad=false;
 							isInsertTems=true;
-							pageNumber--;
 							lblLoadingTextPrevious.setVisible(true);
 							isForwardScroll = false;
-							if(localStore.getItem((pageCountForStorage-10)+"") == null && (pageNumber-1)>=1){
+							if(Storage.isLocalStorageSupported()){
+								getUiHandlers().setDataReterivedFromStorage(localStore.getItem((pageCountForStorage-10)+""),true);
+							}
+							if(pageCountForStorage>11 && localStore.getItem((pageCountForStorage-11)+"") == null && (pageNumber-1)>=1){
 								if(searchDoGbl.getTotalPages()>=(pageNumber-1)){
 									if(AppClientFactory.getCurrentPlaceToken().equals(PlaceTokens.SEARCH_RESOURCE)){
-										getUiHandlers().getCollectionSearchResultsOnPageWise("",pageNumber-1, 9);
+										getUiHandlers().getCollectionSearchResultsOnPageWise("",(pageCountForStorage-11), 9);
 									}else{
-										getUiHandlers().getCollectionSearchResultsOnPageWise("",pageNumber-1, 8);
+										getUiHandlers().getCollectionSearchResultsOnPageWise("",(pageCountForStorage-11), 8);
 									}
 								}
-							}
-							if(Storage.isLocalStorageSupported()){
-								getUiHandlers().setDataReterivedFromStorage(localStore.getItem((pageCountForStorage-9)+""),true);
+								pageNumber--;
 								pageCountForStorage--;
 							}
-							//Window.scrollTo(0, getWidgetHeight()*4);
-						}else{
-							//Window.scrollTo(0, 0);
 						}
 					}
 					//This condition is used to check that the user is scrolling top to bottom
-					if(resultCountVal>=8 && isApiInProgress){
+					if(resultCountVal>=8 && isApiInProgress && isApiInProgressLoad){
 						if ((event.getScrollTop() + Window.getClientHeight()) >= (Document.get().getBody().getClientHeight()-(Document.get().getBody().getClientHeight()/12))) {
 							isInsertTems=false;
-							isApiInProgress=false;
+							isApiInProgress=isApiInProgressLoad=false;
 							lblLoadingText.setVisible(true);
 							pageNumber++;
 							isForwardScroll = true;
 							getUiHandlers().setDataReterivedFromStorage(localStore.getItem(pageNumber+""),true);
-							if(searchDoGbl.getTotalPages()>=(pageNumber+1)){
+							if(searchDoGbl.getTotalPages()>=(pageNumber+1) && localStore.getItem((pageNumber+1)+"") == null){
 								if(AppClientFactory.getCurrentPlaceToken().equals(PlaceTokens.SEARCH_RESOURCE)){
 									getUiHandlers().getCollectionSearchResultsOnPageWise("",pageNumber+1, 9);
 								}else{
 									getUiHandlers().getCollectionSearchResultsOnPageWise("",pageNumber+1, 8);
 								}
+							}else{
+								isApiInProgress=isApiInProgressLoad=true;
 							}
-							
 						}
 					}
 				}
@@ -402,21 +399,19 @@ public abstract class SearchAbstractView<T extends ResourceSearchResultDo> exten
 		return 0;
 	}
 	public void removeFromLocalStorageForward(){
-		if(Storage.isLocalStorageSupported() && localStore.getLength()>=11){
-			int keyVal=pageNumber-9;
-			if(keyVal>1)
+		if(Storage.isLocalStorageSupported() && localStore.getLength()>10){
+			int keyVal=pageCountForStorage-11;
 			localStore.removeItem(keyVal+"");
 		}
 	}
 	public void removeFromLocalStorageBackword(){
-		if(Storage.isLocalStorageSupported() && localStore.getLength()>=11){
+		if(Storage.isLocalStorageSupported() && localStore.getLength()>10){
 			int keyVal;
-			if(pageCountForStorage>=11){
+			if(pageCountForStorage>=10){
 				keyVal=pageCountForStorage;
 			}else{
 				keyVal=pageCountForStorage+7;
 			}
-			if(keyVal>1)
 			localStore.removeItem(keyVal+"");
 		}
 	}
@@ -559,7 +554,11 @@ public abstract class SearchAbstractView<T extends ResourceSearchResultDo> exten
 						searchResultPanel.remove(widget);
 						widgetCount++;
 					}
-					Window.scrollTo(0, getWidgetHeight()*(searchResultPanel.getWidgetCount()*4));
+					if (AppClientFactory.getPlaceManager().getCurrentPlaceRequest().getNameToken().equals(PlaceTokens.SEARCH_COLLECTION)) {
+						Window.scrollTo(0, getWidgetHeight()*30);
+					}else{
+						Window.scrollTo(0, getWidgetHeight()*40);
+					}
 				}
 			}
 		}catch(Exception e){
@@ -569,7 +568,6 @@ public abstract class SearchAbstractView<T extends ResourceSearchResultDo> exten
 	
 	@Override
 	public void postSearch(SearchDo<T> searchDo,boolean isApiCalled) {
-		removeTopWidgets(isInsertTems);
 		searchDoGbl = searchDo;
 		if (searchDo.getSearchResults() != null && searchDo.getSearchResults().size() > 0) {
 			searchResults.setVisible(true);
@@ -577,28 +575,29 @@ public abstract class SearchAbstractView<T extends ResourceSearchResultDo> exten
 			searchResults.setText(i18n.GL3210()+"  "+"("+searchDo.getSearchHits()+")");
 			searchDo.getSearchHits();
 			if(isInsertTems){
-				HTMLPanel widgetsContainer=new HTMLPanel("");
-				searchResultPanel.insert(widgetsContainer,0);
-				for (T searchResult : searchDo.getSearchResults()) {
-					widgetsContainer.add(renderSearchResult(searchResult));
+				if(Document.get().getElementById(searchDo.getSearchResults().get(0).getGooruOid())==null){
+					HTMLPanel widgetsContainer=new HTMLPanel("");
+					searchResultPanel.insert(widgetsContainer,0);
+					for (T searchResult : searchDo.getSearchResults()) {
+						widgetsContainer.add(renderSearchResult(searchResult));
+					}
 				}
 				if(pageCountForStorage>3){
 					Window.scrollTo(0, getWidgetHeight()*4);
 				}
 				lblLoadingTextPrevious.setVisible(false);
 				isApiInProgressBack=true;
-				removeFromLocalStorageBackword();
 			}else{
 				HTMLPanel widgetsContainer=new HTMLPanel("");
 				searchResultPanel.add(widgetsContainer);
 				for (T searchResult : searchDo.getSearchResults()) {
-					widgetsContainer.add(renderSearchResult(searchResult));
+						widgetsContainer.add(renderSearchResult(searchResult));
 				}
 				isApiInProgress=true;
-				removeFromLocalStorageForward();
 			}
 			lblLoadingText.setVisible(false);
 			lblLoadingTextPrevious.setVisible(false);
+			removeTopWidgets(isInsertTems);
 		}else if(pageNumber==1){
 			lblLoadingText.setVisible(false);
 			searchResults.setVisible(true);
@@ -1506,6 +1505,8 @@ public abstract class SearchAbstractView<T extends ResourceSearchResultDo> exten
 		lblLoadingText.setVisible(true);
 		isApiInProgress = true;
 		isApiInProgressBack = true;
+		isApiInProgressBackLoad=true;
+		isApiInProgressLoad=true;
 		pageNumber = 1;
 		//hideScrollDiv.getElement().getStyle().setHeight(0, Unit.PX);
 		previousCount=0;
@@ -1756,12 +1757,14 @@ public abstract class SearchAbstractView<T extends ResourceSearchResultDo> exten
 			if(isForwardScroll){
 				localStore.setItem(pageCountForStorage+"", data);
 				pageCountForStorage++;
+				removeFromLocalStorageForward();
+				isApiInProgressLoad=true;
 			}else{
-				localStore.setItem((pageCountForStorage-3)+"", data);
-			//pageCountForStorage--;
+				isApiInProgressBackLoad=true;
+				localStore.setItem((pageCountForStorage-10)+"", data);
+				removeFromLocalStorageBackword();
 			}
 		}
-		printLoclStoreSize();
 	}	
 	@UiHandler("assessmentsBtn")
 	public void clickOnAssessments(ClickEvent clickEvent){
