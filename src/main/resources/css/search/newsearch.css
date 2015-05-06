@@ -575,6 +575,7 @@ Back to top button
 #morePeoplePopWrapper {
 	width: 600px;
 	margin: 0 auto;
+	padding: 3px 3px;
 	border: 1px solid #ddd;
 	box-shadow: 0 6px 10px rgba(0, 0, 0, 0.176);
 	background: #fff;

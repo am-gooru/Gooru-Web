@@ -4,6 +4,7 @@
 	<ui:with
 		type="org.ednovo.gooru.client.mvp.classpages.assignments.AddAssignmentContainerCBundle"
 		field="res"></ui:with>
+	<ui:with field="i18n" type="org.ednovo.gooru.shared.i18n.MessageProperties" />
 		<g:HTMLPanel>
 	<div id="addCollectionPopup">
 		<div class="popHeader">
@@ -19,8 +20,8 @@
 		</g:ScrollPanel>
 			<div class="clearfix"></div>
 			<div class="popFooter">
-				<div class="addButton leftAlign"><g:Button styleName="primary" ui:field="btnAddNew">Add to New</g:Button></div>
-				<div class="addButton rightAlign"><g:Button styleName="primary" ui:field="btnAddExisting">Add to Existing</g:Button></div>
+				<div class="addButton leftAlign"><g:Button styleName="addNewCollectionStyle" ui:field="btnAddNew">+Add New Collection</g:Button></div>
+				<div class="addButton rightAlign"><g:Button styleName="primary" ui:field="btnAddExisting" text="{i18n.GL0590}" title="{i18n.GL0590}">Add</g:Button></div>
 			</div>
 		<div class="clearfix"></div>
 	</div>
