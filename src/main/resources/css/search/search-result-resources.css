@@ -130,11 +130,12 @@ margin:0 0 0 -20px !important;
 #gooruSearchMainContainer .addthis{
 	margin-left:15px;
 }
-#gooruSearchMainContainer .addthis span{
+#gooruSearchMainContainer .plus{
 	font-size: 30px;
 	color: #999999;
 	line-height: 17px;
 	vertical-align: middle;
+	display:inline-block;
 }
 #gooruSearchMainContainer .resourceImgContainer{
     width: 80px !important;
@@ -316,7 +317,7 @@ margin:0 0 0 -20px !important;
 }
 #gooruSearchMainContainer .playerrating .star{
 	font-size:25px !important;
-    color:#999;
+    color:#4e9746;
 }
 
 @media (min-width: 240px) and (max-width: 319px){

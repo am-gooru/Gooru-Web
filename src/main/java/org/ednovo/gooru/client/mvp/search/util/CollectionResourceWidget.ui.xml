@@ -11,7 +11,7 @@
 					</div>
 				</div>
 				<div class="col-md-5 col-sm-4 col-xs-4 viewContainer">
-				<span>+</span><g:Label ui:field="lbladdCount" styleName="authorName"></g:Label>
+				<g:Label styleName="plus">+</g:Label><g:Label ui:field="lbladdCount" styleName="authorName"></g:Label>
 					<span>
 						<img src="images/eye.png"/> <g:Label ui:field="lblViewCount" styleName="authorName"></g:Label>
 					</span>
