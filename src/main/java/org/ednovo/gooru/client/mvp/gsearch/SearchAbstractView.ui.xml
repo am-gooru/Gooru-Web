@@ -102,7 +102,7 @@
 								<g:HTMLPanel styleName="btn-group">
 								    <panel:HTMLEventPanel ui:field="resourceFiltersDropDwn">
 										<button type="button" class="btn btn-primary">
-											<span class="glyphicon glyphicon-align-justify"
+											<span class="glyphicon gliphIconImage"
 												aria-hidden="true"></span>
 										</button>
 										<button type="button" class="btn btn-primary dropdown-toggle"
