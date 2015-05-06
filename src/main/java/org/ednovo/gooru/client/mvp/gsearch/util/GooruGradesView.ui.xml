@@ -3,7 +3,7 @@
 	xmlns:uc="urn:import:org.ednovo.gooru.client.uc">
 	<ui:with field="i18n" type="org.ednovo.gooru.shared.i18n.MessageProperties" />
 		<g:HTMLPanel>
-			<div class="gradeHeader">Select a signgle or multiple grade(s).</div>
+			<div class="gradeHeader">Select a single or multiple grade(s).</div>
 
 			<g:HTMLPanel styleName="gradesContainer" ui:field="gradeContainer">
 				<uc:UlPanel ui:field="elementryPanel"></uc:UlPanel>
