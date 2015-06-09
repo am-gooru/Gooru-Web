@@ -2056,19 +2056,19 @@ implements IsQuestionTypeView,SelectionHandler<SuggestOracle.Suggestion> {
 		String HsType=	collectionItemDo.getResource().getAttributes().getHlType();
 		
 		if(HsType.equalsIgnoreCase(i18n.GL3229_1())){
-			int widgetcount=0;
+			int widgetcount=1;
 			while (it.hasNext()) {
 				addHotSpotQuestion.setAnswerFields(false);
 				QuestionAnswerDo answer = it.next();
 				
 				final AddAnswerChoice addAnswerChoice=new AddAnswerChoice(widgetcount+"",answer.getAnswerText());
 				
-				/*if(answer.isIsCorrect()){	
-					addAnswerChoice.optionSelectedButton.setStyleName(addWebResourceStyle.answerSelected());
+				if(answer.isIsCorrect()){	
+					addAnswerChoice.optionSelectedButton.setStyleName("answerMarkSelected");
 				}else{
-					addAnswerChoice.optionSelectedButton.setStyleName(addWebResourceStyle.answerDeselected());
+					addAnswerChoice.optionSelectedButton.setStyleName("answerMarkDeselected");
 				}
-				*/
+				
 				
 				addHotSpotQuestion.textAnsContainer.add(addAnswerChoice);
 				widgetcount++;

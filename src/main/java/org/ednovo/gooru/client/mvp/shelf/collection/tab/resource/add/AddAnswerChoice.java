@@ -63,6 +63,7 @@ public class AddAnswerChoice extends Composite implements HasMouseOutHandlers,Ha
 	Label labelChoice;
 
 	@UiField
+	public
 	Label optionSelectedButton;
 	@UiField public TinyMCE answerTextBox;
 	@UiField HTMLPanel tinyOrTextBoxConatiner,deleteButtonContainer;
