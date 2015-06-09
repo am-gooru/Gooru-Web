@@ -47,6 +47,7 @@ import org.ednovo.gooru.client.mvp.search.event.SetHeaderZIndexEvent;
 import org.ednovo.gooru.client.mvp.shelf.collection.tab.resource.add.drive.GoogleDocsResourceView;
 import org.ednovo.gooru.client.mvp.shelf.collection.tab.resource.add.drive.GoogleWebResource;
 import org.ednovo.gooru.client.mvp.shelf.collection.tab.resource.addquestion.QuestionTypePresenter;
+import org.ednovo.gooru.client.mvp.shelf.collection.tab.resource.addquestion.QuestionTypeView;
 import org.ednovo.gooru.client.mvp.shelf.collection.tab.resource.exists.ExistsResourceView;
 import org.ednovo.gooru.client.mvp.shelf.collection.tab.resource.item.CollectionEditResourceCBundle;
 import org.ednovo.gooru.client.mvp.shelf.event.GetEditPageHeightEvent;
@@ -245,7 +246,7 @@ public class AddResourceView extends PopupViewWithUiHandlers<AddResourceUiHandle
 		hotSpot.getElement().setAttribute("alt", i18n.GL3231_1());
 		hotSpot.getElement().setAttribute("title", i18n.GL3231_1());
 		hotSpotTabButton.getElement().setId("hotSpotTabButton");
-		hotSpotTabButton.addClickHandler(new ShowEquationWidget());
+		hotSpotTabButton.addClickHandler(new ShowHotSpotWidget());
 		hotText.setText(i18n.GL3212_1());
 		hotText.getElement().setAttribute("alt", i18n.GL3212_1());
 		hotText.getElement().setAttribute("title", i18n.GL3212_1());
@@ -541,6 +542,7 @@ public class AddResourceView extends PopupViewWithUiHandlers<AddResourceUiHandle
 				@Override
 				public void execute() {
 					if(collectionItemDo!=null){
+						getUiHandlers().setHSEditData();
 						showEditQuestionResourceView();
 					}
 				}
@@ -961,8 +963,15 @@ public class AddResourceView extends PopupViewWithUiHandlers<AddResourceUiHandle
 				titleLbl.setText(i18n.GL0304());
 				titleLbl.getElement().setAttribute("alt", i18n.GL0304());
 				titleLbl.getElement().setAttribute("title", i18n.GL0304());
+				
+				int type = collectionItemDo.getResource().getType() != null ? collectionItemDo.getResource().getType() : collectionItemDo.getQuestionInfo().getType();
+				if(type==10){
+				getUiHandlers().addSelectedQuestionType("HS");
+				getUiHandlers().setEditQuestionData(collectionItemDo);
+				}
 				addQuestionResourceWidget=new AddQuestionResourceWidget(collectionItemDo);
 				addQuestionResourceWidget.getHideRightsToolTip();
+				
 				if(collectionDo!=null&&collectionDo.getCollectionType().equalsIgnoreCase("quiz")){
 					hideTabButtons(false, true, true);
 				}else{
@@ -970,7 +979,6 @@ public class AddResourceView extends PopupViewWithUiHandlers<AddResourceUiHandle
 				}
 				tabViewContainer.add(addQuestionResourceWidget);
 				tabViewContainer.getElement().setId("pnlTabViewContainer");
-				
 				int questionTypeNum=collectionItemDo.getResource().getType() != null ? collectionItemDo.getResource().getType() : collectionItemDo.getQuestionInfo().getType(); 
 				if(questionTypeNum==1){
 					highlightSelectedTab("MC");
@@ -993,6 +1001,9 @@ public class AddResourceView extends PopupViewWithUiHandlers<AddResourceUiHandle
 				}else if(questionTypeNum==9){
 					highlightSelectedTab("HT_RO");
 					hotTextRadioButton.setValue(true);
+				}else if(questionTypeNum==10){
+					highlightSelectedTab("HS");
+					hotSpotRadioButton.setValue(true);
 				}
 				AppClientFactory.fireEvent(new GetEditPageHeightEvent(appPopUp, false));
 			}catch(Exception e) {
@@ -1128,7 +1139,7 @@ public class AddResourceView extends PopupViewWithUiHandlers<AddResourceUiHandle
 	}
 	
 	
-	private class ShowEquationWidget implements ClickHandler{
+	private class ShowHotSpotWidget implements ClickHandler{
 		@Override
 		public void onClick(ClickEvent event) {
 			Window.enableScrolling(false);

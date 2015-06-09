@@ -98,6 +98,10 @@ public interface AddResourceUiHandlers extends BaseUiHandlers, AddResourceImageH
 	
 	void addSelectedQuestionType(String type);
 	
+	void setEditQuestionData(CollectionItemDo collectionItemDo);
+	
+	void setHSEditData();
+	
 	@ContentSlot
 	public static final Type<RevealContentHandler<?>> SLOT_QUESTION_TYPE = new Type<RevealContentHandler<?>>();
 

@@ -4,9 +4,11 @@ package org.ednovo.gooru.client.mvp.shelf.collection.tab.resource.addquestion;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.ednovo.gooru.client.SimpleAsyncCallback;
 import org.ednovo.gooru.client.effects.FadeInAndOut;
@@ -48,6 +50,8 @@ import org.ednovo.gooru.shared.model.user.ProfileDo;
 import org.ednovo.gooru.shared.util.StringUtil;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.EventTarget;
@@ -523,22 +527,20 @@ implements IsQuestionTypeView,SelectionHandler<SuggestOracle.Suggestion> {
 
 	@Override
 	public void getRevealType() {
+		getHideRightsToolTip();
+	}
+	
+	public void clearTinyMce(){
 		questionNameTextArea=new TinyMCE(500);
 		explainationTextArea= new TinyMCE();
-
 		questionNameTextAreaContainer.clear();
 		explainationTextAreaContainer.clear();
-
 		questionNameTextArea.setCharacterLimit(500);
 		questionNameTextArea.getElement().setId("tinyMCEQuestionNameTextArea");
 		questionNameTextArea.getElement().setAttribute("maxlength", "500");
 		questionNameTextArea.markAsBlankPanel.setVisible(false);
-
 		questionNameTextAreaContainer.add(questionNameTextArea);
 		explainationTextAreaContainer.add(explainationTextArea);
-
-
-		getHideRightsToolTip();
 	}
 
 
@@ -1883,6 +1885,7 @@ implements IsQuestionTypeView,SelectionHandler<SuggestOracle.Suggestion> {
 	}
 
 	public void resetFields() {
+		clearTinyMce();
 		buttonContainer.getElement().getStyle().setDisplay(Display.BLOCK);
 		resetToHints();
 		setHotSpotAnswerFields();
@@ -1897,7 +1900,6 @@ implements IsQuestionTypeView,SelectionHandler<SuggestOracle.Suggestion> {
 		isSaveButtonClicked=false;
 		clearObjects();
 		ansChoiceErrMsg.setText("");
-		
 	}
 	
 	public void clearObjects(){
@@ -2019,4 +2021,86 @@ implements IsQuestionTypeView,SelectionHandler<SuggestOracle.Suggestion> {
 		});
 		return validationValue;
 	}
+	
+
+
+	@Override
+	public void editQuestion(CollectionItemDo collectionItemDo) {
+		this.collectionItemDo=collectionItemDo;
+		isEditResource=true;
+		explanationContainer.setVisible(false);
+    	depthOfKnowledgeContainer.setVisible(false);
+    	hintsContainer.setVisible(false);
+    	standardContainer.setVisible(false);
+    	centuryContainer.setVisible(false);
+    	
+		TreeSet<QuestionAnswerDo> answerChoicesSet = collectionItemDo.getResource().getAnswers() != null ? collectionItemDo.getResource().getAnswers() : collectionItemDo.getQuestionInfo().getAnswers();
+		Iterator<QuestionAnswerDo> it = answerChoicesSet.iterator(); 
+		
+		List<QuestionAnswerDo> questionAnswerDoList = new ArrayList<QuestionAnswerDo>();
+		
+		
+		TreeSet<QuestionHintsDo> hintsList = collectionItemDo.getResource().getHints() != null ? collectionItemDo.getResource().getHints() : collectionItemDo.getQuestionInfo().getHints();
+		Iterator<QuestionHintsDo> iterator = hintsList.iterator();
+		hintsContainer.clear();
+		while (iterator.hasNext()) {
+			QuestionHintsDo hints = iterator.next();
+			int widgetCount=hintsContainer.getWidgetCount();
+	        final AddHintsView addHints = new AddHintsView(widgetCount+1,hints.getHintText());
+	        addHintsTextArea(addHints);
+		}
+		
+		AddHotSpotQuestionAnswerChoice addHotSpotQuestion=(AddHotSpotQuestionAnswerChoice) questionHotSpotAnswerChoiceContainer.getWidget(0);
+		
+		
+		String HsType=	collectionItemDo.getResource().getAttributes().getHlType();
+		
+		if(HsType.equalsIgnoreCase(i18n.GL3229_1())){
+			addHotSpotQuestion.setAnswerFields(false);
+			addHotSpotQuestion.addAnswerChoice();
+		}
+		
+	}
+	
+	
+	public void setEditData(){
+		try{
+			 setEditQuestionImage();
+			
+			   int type = collectionItemDo.getResource().getType() != null ? collectionItemDo.getResource().getType() : collectionItemDo.getQuestionInfo().getType();
+				String explanation = collectionItemDo.getResource().getExplanation() != null ? collectionItemDo.getResource().getExplanation() : collectionItemDo.getQuestionInfo().getExplanation();
+				
+				questionNameTextArea.setText(collectionItemDo.getResource().getTitle());
+				questionNameTextArea.getElement().setAttribute("alt", collectionItemDo.getResource().getTitle());
+				questionNameTextArea.getElement().setAttribute("title", collectionItemDo.getResource().getTitle());
+				explainationTextArea.setText(explanation);
+				explainationTextArea.getElement().setAttribute("alt", explanation);
+				explainationTextArea.getElement().setAttribute("title", explanation);
+				 
+			}catch(Exception e){
+				AppClientFactory.printSevereLogger(e.getMessage());
+			}
+	}
+	
+	
+	
+	public void setEditQuestionImage(){
+		String tumbnailUrl="";
+		if(collectionItemDo!=null){
+			if (collectionItemDo.getResource().getAssets() != null
+					&& collectionItemDo.getResource().getAssets().size() > 0) {
+				tumbnailUrl = collectionItemDo.getCollection().getAssetURI()
+						+ collectionItemDo.getResource().getFolder()
+						+ collectionItemDo.getResource().getAssets().get(0).getAsset().getName();
+				
+			}else if(collectionItemDo.getResource().getThumbnails()!=null && collectionItemDo.getResource().getThumbnails().getUrl()!=null) {
+				tumbnailUrl = collectionItemDo.getResource().getThumbnails().getUrl();
+			}
+			
+			setImageUrl(tumbnailUrl, null, true, false);
+			
+		}
+		
+	}
+	
 }
