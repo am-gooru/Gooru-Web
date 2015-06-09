@@ -19,6 +19,7 @@ import org.ednovo.gooru.client.mvp.shelf.collection.tab.resource.add.AddAnswerCh
 import org.ednovo.gooru.client.mvp.shelf.collection.tab.resource.add.AddAnswerImg;
 import org.ednovo.gooru.client.mvp.shelf.collection.tab.resource.add.AddHintsView;
 import org.ednovo.gooru.client.mvp.shelf.collection.tab.resource.add.AddHotSpotQuestionAnswerChoice;
+import org.ednovo.gooru.client.mvp.shelf.collection.tab.resource.add.AddQuestionAnswerChoice;
 import org.ednovo.gooru.client.mvp.shelf.collection.tab.resource.add.AddQuestionImg;
 import org.ednovo.gooru.client.uc.AppMultiWordSuggestOracle;
 import org.ednovo.gooru.client.uc.AppSuggestBox;
@@ -78,6 +79,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -2034,11 +2036,6 @@ implements IsQuestionTypeView,SelectionHandler<SuggestOracle.Suggestion> {
     	standardContainer.setVisible(false);
     	centuryContainer.setVisible(false);
     	
-		TreeSet<QuestionAnswerDo> answerChoicesSet = collectionItemDo.getResource().getAnswers() != null ? collectionItemDo.getResource().getAnswers() : collectionItemDo.getQuestionInfo().getAnswers();
-		Iterator<QuestionAnswerDo> it = answerChoicesSet.iterator(); 
-		
-		List<QuestionAnswerDo> questionAnswerDoList = new ArrayList<QuestionAnswerDo>();
-		
 		
 		TreeSet<QuestionHintsDo> hintsList = collectionItemDo.getResource().getHints() != null ? collectionItemDo.getResource().getHints() : collectionItemDo.getQuestionInfo().getHints();
 		Iterator<QuestionHintsDo> iterator = hintsList.iterator();
@@ -2050,14 +2047,33 @@ implements IsQuestionTypeView,SelectionHandler<SuggestOracle.Suggestion> {
 	        addHintsTextArea(addHints);
 		}
 		
-		AddHotSpotQuestionAnswerChoice addHotSpotQuestion=(AddHotSpotQuestionAnswerChoice) questionHotSpotAnswerChoiceContainer.getWidget(0);
+		TreeSet<QuestionAnswerDo> answerChoicesSet = collectionItemDo.getResource().getAnswers() != null ? collectionItemDo.getResource().getAnswers() : collectionItemDo.getQuestionInfo().getAnswers();
+		Iterator<QuestionAnswerDo> it = answerChoicesSet.iterator(); 
 		
+		
+		AddHotSpotQuestionAnswerChoice addHotSpotQuestion=(AddHotSpotQuestionAnswerChoice) questionHotSpotAnswerChoiceContainer.getWidget(0);
 		
 		String HsType=	collectionItemDo.getResource().getAttributes().getHlType();
 		
 		if(HsType.equalsIgnoreCase(i18n.GL3229_1())){
-			addHotSpotQuestion.setAnswerFields(false);
-			addHotSpotQuestion.addAnswerChoice();
+			int widgetcount=1;
+			while (it.hasNext()) {
+				addHotSpotQuestion.setAnswerFields(false);
+				QuestionAnswerDo answer = it.next();
+				
+				final AddAnswerChoice addAnswerChoice=new AddAnswerChoice(widgetcount+"",answer.getAnswerText());
+				
+				if(answer.isIsCorrect()){	
+					addAnswerChoice.optionSelectedButton.setStyleName("answerMarkSelected");
+				}else{
+					addAnswerChoice.optionSelectedButton.setStyleName("answerMarkDeselected");
+				}
+				
+				
+				addHotSpotQuestion.textAnsContainer.add(addAnswerChoice);
+				widgetcount++;
+			}
+			
 		}
 		
 	}
@@ -2065,17 +2081,72 @@ implements IsQuestionTypeView,SelectionHandler<SuggestOracle.Suggestion> {
 	
 	public void setEditData(){
 		try{
-			 setEditQuestionImage();
-			
-			   int type = collectionItemDo.getResource().getType() != null ? collectionItemDo.getResource().getType() : collectionItemDo.getQuestionInfo().getType();
-				String explanation = collectionItemDo.getResource().getExplanation() != null ? collectionItemDo.getResource().getExplanation() : collectionItemDo.getQuestionInfo().getExplanation();
+			setEditQuestionImage();
+
+			int type = collectionItemDo.getResource().getType() != null ? collectionItemDo.getResource().getType() : collectionItemDo.getQuestionInfo().getType();
+			timer.schedule(0);
+
+			if(collectionItemDo.getResource().getDepthOfKnowledges()!=null){
+				int checkBoxCount=0;
+				for (checkboxSelectedDo item : collectionItemDo.getResource().getDepthOfKnowledges()) {			
+					   if(item.isSelected()){
+						   if(checkBoxCount==0)
+						   chkLevelRecall.setChecked(true);
+						   if(checkBoxCount==1)
+					       chkLevelSkillConcept.setChecked(true);
+						   if(checkBoxCount==2)
+					       chkLevelStrategicThinking.setChecked(true);
+						   if(checkBoxCount==3)
+					       chkLevelExtendedThinking.setChecked(true);
+					   }
+					   checkBoxCount++;
+					}
+				}
 				
-				questionNameTextArea.setText(collectionItemDo.getResource().getTitle());
-				questionNameTextArea.getElement().setAttribute("alt", collectionItemDo.getResource().getTitle());
-				questionNameTextArea.getElement().setAttribute("title", collectionItemDo.getResource().getTitle());
-				explainationTextArea.setText(explanation);
-				explainationTextArea.getElement().setAttribute("alt", explanation);
-				explainationTextArea.getElement().setAttribute("title", explanation);
+				if(collectionItemDo.getStandards()!=null){
+					standardsPanel.clear();
+					standardsDo.clear();
+					String codeID="",code="",label="";
+					for (Map<String, String> map: collectionItemDo.getStandards()) {
+						 CodeDo codeObj=new CodeDo();
+						for (Map.Entry<String, String> entry : map.entrySet()) {
+							String key = entry.getKey();
+							String values = entry.getValue();
+							 if(key.contains("codeId")){
+								 codeID=values;
+								 codeObj.setCodeId(Integer.parseInt(values));
+							 }
+							 if(key.contains("code")){
+								 code=values;
+								 codeObj.setCode(values);
+							 }
+							 if(key.contains("description")){
+								 label=values;
+								 codeObj.setLabel(values);
+							 }
+							}
+						 standardsDo.add(codeObj);
+						 standardsPanel.add(createStandardLabel(code, codeID,label));
+					}
+				}
+				if(collectionItemDo.getResource().getSkills()!= null && collectionItemDo.getResource().getSkills().size()>0){
+					centuryPanel.clear();
+					for (StandardFo standardObj : collectionItemDo.getResource().getSkills()) {
+						 CodeDo codeObj=new CodeDo();
+						 codeObj.setCodeId(standardObj.getCodeId());
+						 codeObj.setCode(standardObj.getLabel());
+						 standardsDo.add(codeObj);
+						 centurySelectedValues.put(Long.parseLong(standardObj.getCodeId()+""), standardObj.getLabel());
+						 centuryPanel.add(create21CenturyLabel(standardObj.getLabel(),standardObj.getCodeId()+"",""));
+					}
+				}
+
+			
+			setDepthOfKnowledgeContainer();
+			setHintsContainer();
+			setStandardsContainer();
+			setCenturyContainer();
+
 				 
 			}catch(Exception e){
 				AppClientFactory.printSevereLogger(e.getMessage());
@@ -2102,5 +2173,24 @@ implements IsQuestionTypeView,SelectionHandler<SuggestOracle.Suggestion> {
 		}
 		
 	}
+	
+	
+	Timer timer=new Timer() {
+		
+		@Override
+		public void run() {
+			String explanation = collectionItemDo.getResource().getExplanation() != null ? collectionItemDo.getResource().getExplanation() : collectionItemDo.getQuestionInfo().getExplanation();
+			
+			questionNameTextArea.setText(collectionItemDo.getResource().getTitle());
+			questionNameTextArea.getElement().setAttribute("alt", collectionItemDo.getResource().getTitle());
+			questionNameTextArea.getElement().setAttribute("title", collectionItemDo.getResource().getTitle());
+			explainationTextArea.setText(explanation);
+			explainationTextArea.getElement().setAttribute("alt", explanation);
+			explainationTextArea.getElement().setAttribute("title", explanation);
+			
+			
+			setExplanationContainer();
+		}
+	};
 	
 }

@@ -365,6 +365,7 @@ public class AddResourceView extends PopupViewWithUiHandlers<AddResourceUiHandle
 		openEndedRadioButton.setValue(false);
 		trueOrFalseRadioButton.setValue(false);
 		hotTextRadioButton.setValue(false);
+		hotSpotRadioButton.setValue(false);
 //		fillInTheBlankTabButton.setStyleName(res.css().buttonDeSelected());
 //		trueOrFlaseButton.setStyleName(res.css().buttonDeSelected());
 //		openEndedButton.setStyleName(res.css().buttonDeSelected());
@@ -1144,9 +1145,12 @@ public class AddResourceView extends PopupViewWithUiHandlers<AddResourceUiHandle
 		public void onClick(ClickEvent event) {
 			Window.enableScrolling(false);
 			if(!hotSpotRadioButton.getValue()){
-				getUiHandlers().addSelectedQuestionType("HS");
-				highlightSelectedTab("HS");
 				hotSpotRadioButton.setValue(true);
+				if(collectionItemDo!=null){
+					getUiHandlers().setHSEditData();
+				}
+				highlightSelectedTab("HS");
+				getUiHandlers().addSelectedQuestionType("HS");
 				
 			}
 		}
