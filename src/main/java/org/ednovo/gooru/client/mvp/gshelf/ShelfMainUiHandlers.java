@@ -24,14 +24,11 @@
  ******************************************************************************/
 package org.ednovo.gooru.client.mvp.gshelf;
 
-import java.util.HashMap;
-
 import org.ednovo.gooru.client.gin.BaseUiHandlers;
 import org.ednovo.gooru.client.mvp.shelf.collection.folders.events.SetFolderMetaDataHandler;
 import org.ednovo.gooru.client.mvp.shelf.collection.folders.events.SetFolderParentNameHandler;
 import org.ednovo.gooru.client.mvp.shelf.event.GetEditPageHeightEventHandler;
 import org.ednovo.gooru.client.mvp.shelf.event.UpdateResourceCountEventHandler;
-import org.ednovo.gooru.shared.model.content.CollectionDo;
 
 import com.google.gwt.event.shared.GwtEvent.Type;
 import com.gwtplatform.mvp.client.annotations.ContentSlot;
@@ -61,20 +58,7 @@ public interface ShelfMainUiHandlers extends BaseUiHandlers,GetEditPageHeightEve
 	@ContentSlot
 	public static final Type<RevealContentHandler<?>> TYPE_FOLDERS_SLOT = new Type<RevealContentHandler<?>>();
 	
-	void deleteCollection(String collectionId);
-
-	void revealTab(Type<RevealContentHandler<?>> tabType, CollectionDo collectionDo);
-
-	void clearTabSlot();
-
-	void imageUpload();
-
-	void updateCollectionInfo(String collectionId, String title, String description);
+	void getChildFolderItems(String folderId, boolean isDataCalled);   
 	
-	void copyCollection(String collectionUid, boolean addToShelf);
-	
-	void setFoldersSlot(String parentId);
-
-	void moveCollection(String gooruOid, String parentId, String folderName, HashMap<String, String> params);   
 
 }
