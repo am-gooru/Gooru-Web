@@ -344,4 +344,10 @@ public class ShelfMainPresenter extends BasePlacePresenter<IsShelfMainView, Shel
 	public void setFolderMetaData(Map<String, String> folderMetaData) {
 		
 	}
+
+	@Override
+	public void setListPresenterBasedOnType(String type) {
+		myCollectionsListPresenter.setData(type);
+		setInSlot(COURSE_LIST_SLOT, myCollectionsListPresenter,false);	
+	}
 }
