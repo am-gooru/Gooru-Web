@@ -28,6 +28,8 @@ import java.util.Iterator;
 
 import org.ednovo.gooru.client.gin.BaseViewWithHandlers;
 import org.ednovo.gooru.client.mvp.gshelf.util.ContentWidgetWithMove;
+import org.ednovo.gooru.client.uc.H2Panel;
+import org.ednovo.gooru.shared.i18n.MessageProperties;
 import org.ednovo.gooru.shared.util.ClientConstants;
 
 import com.google.gwt.core.client.GWT;
@@ -44,8 +46,13 @@ public class MyCollectionsListView  extends BaseViewWithHandlers<MyCollectionsLi
 	interface MyCollectionsListViewUiBinder extends UiBinder<Widget, MyCollectionsListView> {
 	}
 	
+	private MessageProperties i18n = GWT.create(MessageProperties.class);
+	
 	@UiField HTMLPanel courseListContainer;
 	@UiField VerticalPanel pnlCourseList;
+	@UiField H2Panel h2Title;
+	
+	final String COURSE="Course",UNIT="Unit",LESSON="Lesson";
 
 	String type;
 	
@@ -72,6 +79,13 @@ public class MyCollectionsListView  extends BaseViewWithHandlers<MyCollectionsLi
 	@Override
 	public void setData(String type) {
 		this.type=type;
+		if(COURSE.equalsIgnoreCase(type)){
+			h2Title.setText(i18n.GL1180());
+		}else if(UNIT.equalsIgnoreCase(type)){
+			h2Title.setText(i18n.GL3279());
+		}else if(LESSON.equalsIgnoreCase(type)){
+			h2Title.setText(i18n.GL3280());
+		}
 		for (int i = 0; i <10; i++) {
 			final ContentWidgetWithMove widgetMove=new ContentWidgetWithMove(i,type) {
 				@Override

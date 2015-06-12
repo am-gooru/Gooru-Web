@@ -10,10 +10,10 @@
 		</div>
 		<div class="tableColumn">
 			<div class="tableListTags">
-				<span>Units (2)</span>
-				<span>Lessons (4)</span>
-				<span>Collections (10)</span>
-				<span>Assessments (2)</span>
+				<g:InlineLabel ui:field="spnUnitsCount"/>
+				<g:InlineLabel ui:field="spnLessonsCount"/>
+				<g:InlineLabel ui:field="spnCollectionsCount"/>
+				<g:InlineLabel ui:field="spnAssessmentsCount"/>
 			</div>
 		</div>
 		<div class="tableColumn">
