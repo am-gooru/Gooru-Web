@@ -220,6 +220,7 @@ public class ShelfMainView extends BaseViewWithHandlers<ShelfMainUiHandlers> imp
 			 if(slot==ShelfMainPresenter.COURSE_LIST_SLOT){
 				 pnlSlot.add(content);
 			 }else{
+				 
 			}
 		}else{
 

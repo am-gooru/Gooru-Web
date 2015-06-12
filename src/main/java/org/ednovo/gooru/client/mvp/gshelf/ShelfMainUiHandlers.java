@@ -60,5 +60,9 @@ public interface ShelfMainUiHandlers extends BaseUiHandlers,GetEditPageHeightEve
 	
 	void getChildFolderItems(String folderId, boolean isDataCalled);   
 	
-
+	/**
+	 * This is used to display all the courses,Units, Lessons and collections list with move functionality.
+	 * @param type
+	 */
+	void setListPresenterBasedOnType(String type);
 }

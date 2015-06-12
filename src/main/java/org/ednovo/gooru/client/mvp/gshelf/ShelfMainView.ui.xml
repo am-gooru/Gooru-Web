@@ -6,18 +6,13 @@
 	<ui:with field="i18n" type="org.ednovo.gooru.shared.i18n.MessageProperties" />
 	<g:HTMLPanel ui:field="gShelfMainContainer">
 		<g:HTMLPanel styleName="gradeContainer greyBackground">
-
 			<div class="container">
 				<div class="row no-gutter equifier">
-
 					<div class="col-md-3 col-sm-3">
-
-
 						<div class="createMenu animate" data-animate="fadeInLeft">
-
 							<!-- Split button -->
 							<div class="btn-group btn-block">
-								<button type="button" class="btn btn-default btn-left">My Courses </button>
+								<button type="button" class="btn btn-default btn-left">My Courses</button>
 								<button type="button" class="btn btn-default btn-right dropdown-toggle"
 									data-toggle="dropdown" aria-expanded="false">
 									<span class="caret"></span>
@@ -39,14 +34,9 @@
 									</li>
 								</ul>
 							</div>
-
 						</div>
-
-
 						<div class="floderLeftContainer">
-
 							<div class="folderListBlock">
-
 								<!-- <ul>
 
 									<li class="active">
@@ -62,23 +52,14 @@
 						    <panel:HTMLEventPanel styleName="folderLeftMainHeader" ui:field="organizeRootPnl">
 					             <g:HTMLPanel>MyCollections</g:HTMLPanel>
 					        </panel:HTMLEventPanel> 
-								
 								<g:HTMLPanel ui:field="floderTreeContainer"/>
-
-
 							</div>
-
-
-
-
 						</div>
-
 					</div>
-
-				</div>
-				<div class="col-md-9 col-sm-9">
-					<g:HTMLPanel styleName="floderRightContainer" ui:field="pnlSlot"/>
-					<div class="clearfix"></div>
+					<div class="col-md-9 col-sm-9">
+						<g:HTMLPanel styleName="floderRightContainer" ui:field="pnlSlot"/>
+						<div class="clearfix"></div>
+					</div>
 				</div>
 			</div>
 		</g:HTMLPanel>
