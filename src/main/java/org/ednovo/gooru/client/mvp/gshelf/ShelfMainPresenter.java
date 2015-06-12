@@ -167,8 +167,6 @@ public class ShelfMainPresenter extends BasePlacePresenter<IsShelfMainView, Shel
 		Document doc = Document.get();
 		doc.getBody().setClassName(""); 
 		
-		
-		
 		addRegisteredHandler(SetFolderParentNameEvent.TYPE, this);
 		addRegisteredHandler(SetFolderMetaDataEvent.TYPE, this);
 	}
@@ -207,7 +205,6 @@ public class ShelfMainPresenter extends BasePlacePresenter<IsShelfMainView, Shel
 	public void onBind() {
 		super.onBind();
 		Window.enableScrolling(true);
-		
 	}
 	
 	@Override
@@ -219,6 +216,8 @@ public class ShelfMainPresenter extends BasePlacePresenter<IsShelfMainView, Shel
 	protected void onReveal() {
 		super.onReveal();
 		getResourceService().getFolderWorkspace((ShelfListView.getpageNumber()-1)*20, 20,null,null,false,getUserCollectionAsyncCallback(true));
+		myCollectionsListPresenter.setData("Course");
+		setInSlot(COURSE_LIST_SLOT, myCollectionsListPresenter,false);	
 	}
 	
 	@Override
@@ -226,8 +225,6 @@ public class ShelfMainPresenter extends BasePlacePresenter<IsShelfMainView, Shel
 		super.onReset();
 		Window.enableScrolling(true);
 		Window.scrollTo(0, 0);
-		myCollectionsListPresenter.setData("Course");
-		setInSlot(COURSE_LIST_SLOT, myCollectionsListPresenter,false);	
 	}
 	
 	public ShelfServiceAsync getShelfService() {
@@ -242,18 +239,13 @@ public class ShelfMainPresenter extends BasePlacePresenter<IsShelfMainView, Shel
 		this.resourceService = resourceService;
 	}
 
-	
-
-
 	@Override
 	public String getViewToken() {
 		return PlaceTokens.SHELF;
 	}
 
 	public void increaseGlassHeight(Element glass){
-	        
-	         Style style = glass.getStyle();
-	
+	      Style style = glass.getStyle();
 	      int winWidth = Window.getClientWidth();
 	      int winHeight = Window.getClientHeight();
 	
@@ -280,21 +272,6 @@ public class ShelfMainPresenter extends BasePlacePresenter<IsShelfMainView, Shel
 		//getView().updateResoureCount(resourceCount);
 		
 	}
-	
-
-	private void setFolderUrlParams() {
-		O1_LEVEL_VALUE = AppClientFactory.getPlaceManager().getRequestParameter("o1");
-		O2_LEVEL_VALUE = AppClientFactory.getPlaceManager().getRequestParameter("o2");
-		O3_LEVEL_VALUE = AppClientFactory.getPlaceManager().getRequestParameter("o3");
-		if(O3_LEVEL_VALUE!=null){
-			parentId=O3_LEVEL_VALUE;
-		}else if(O2_LEVEL_VALUE!=null){
-			parentId=O2_LEVEL_VALUE;
-		}else if(O1_LEVEL_VALUE!=null){
-			parentId=O1_LEVEL_VALUE;
-		}
-	}
-	
 	public void invokeErrorPopup(){
 		/*if (errorPopup == null){
 			errorPopup = new ErrorPopup(i18n.GL0340());
@@ -302,8 +279,6 @@ public class ShelfMainPresenter extends BasePlacePresenter<IsShelfMainView, Shel
 			errorPopup.center();
 		}*/
 	}
-
-	
 	public void getUserSheldId(){
 		if(!AppClientFactory.isAnonymous()){
 			String userUid=AppClientFactory.getLoggedInUser().getGooruUId();
@@ -325,7 +300,6 @@ public class ShelfMainPresenter extends BasePlacePresenter<IsShelfMainView, Shel
 		clrPanel=clearShelfPanel;
 		if (userCollectionAsyncCallback == null) {
 			userCollectionAsyncCallback = new SimpleAsyncCallback<FolderListDo>() {
-
 				@Override
 				public void onSuccess(FolderListDo result) {
 					getView().setUserShelfData(result.getSearchResult(),clrPanel);
@@ -363,14 +337,11 @@ public class ShelfMainPresenter extends BasePlacePresenter<IsShelfMainView, Shel
 	
 	@Override
 	public void setFolderParentName(String folderName) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void setFolderMetaData(Map<String, String> folderMetaData) {
-		// TODO Auto-generated method stub
 		
 	}
-	
 }
